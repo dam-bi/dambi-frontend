@@ -1,1 +1,49 @@
 @import "./tailwind.css";
+
+@layer base {
+  :root {
+    --bg: #ffffff;
+    --ink: #1a1a1a;
+    --muted: #767267;
+    --cream: #f7f5f0;
+    --border: #e4e0d8;
+    --danger: #c81e3a;
+    --danger-dark: #9e1730;
+    --gold: #b8952e;
+  }
+
+  html {
+    font-family: "Noto Serif KR";
+    color: var(--ink);
+  }
+
+  * {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+  }
+
+  button,
+  a {
+    cursor: pointer;
+    display: block;
+  }
+
+  input {
+    outline: none;
+  }
+
+  input:focus {
+    outline: none;
+  }
+
+  svg {
+    width: 20px;
+    height: 20px;
+    stroke-width: 1px;
+  }
+
+  li {
+    list-style: none;
+  }
+}
