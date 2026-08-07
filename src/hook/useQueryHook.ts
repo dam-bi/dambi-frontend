@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { fetchData } from "../api/fetchData";
 
-export default function useQueryHook(type: string, id: string) {
-  return useQuery({
-    queryKey: [`${type}`, id],
+export default function useQueryHook<T>(type: string, id: string) {
+  return useQuery<T>({
+    queryKey: [type, id],
     queryFn: () => {
       return fetchData(type, id);
     },

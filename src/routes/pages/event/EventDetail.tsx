@@ -11,7 +11,7 @@ export default function EventDetail() {
     isError,
     error,
     data: event,
-  } = useQueryHook("events", id!);
+  } = useQueryHook<EventDetail>("events", id!);
 
   if (isError && error) {
     toast.error("이벤트 정보를 찾을 수 없습니다. 이벤트 페이지로 돌아갑니다.", {
@@ -23,7 +23,7 @@ export default function EventDetail() {
 
   console.log(event);
 
-  if (isLoading) return <EventDetailPageSkeleton />;
+  if (isLoading || !event) return <EventDetailPageSkeleton />;
 
   return (
     <section className="w-full max-w-7xl px-5 py-20 mx-auto flex flex-col md:flex-row gap-5 relative">

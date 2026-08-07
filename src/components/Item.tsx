@@ -51,3 +51,76 @@ export function EventItem({ event }: { event: Event }) {
     </div>
   );
 }
+
+export function ConcertItemSkeleton() {
+  return (
+    <div className="border border-(--border) rounded-xl py-5 px-10  transition-all duration-300 ease-in-out hover:-translate-y-1.5  hover:shadow-[0_12px_28px_rgba(26,26,26,0.2)] flex items-center">
+      {/* 순위 */}
+      <div className="bg-(--cream) w-14 h-14 rounded-xl" />
+
+      {/* 이미지 */}
+      <div className="bg-(--cream) w-30 h-40 rounded-xl ml-20" />
+
+      {/* 정보 */}
+      <div className="ml-2.5">
+        {/* 태그 */}
+        <div className="w-10 h-5 bg-(--cream) rounded-xl mb-1.5" />
+        {/* 제목 */}
+        <div className="w-50 h-5.5 bg-(--cream) rounded-xl mb-2" />
+        {/* 태그 */}
+        <div className="w-75 h-5 bg-(--cream) rounded-xl" />
+      </div>
+
+      <div className="w-14 h-10 bg-(--cream) rounded-xl ml-auto" />
+    </div>
+  );
+}
+
+export function ConcertItem({
+  concert,
+  index,
+}: {
+  concert: Concert;
+  index: number;
+}) {
+  return (
+    <div className="border border-(--border) rounded-xl py-5 px-10  transition-all duration-300 ease-in-out hover:shadow-[0_12px_28px_rgba(26,26,26,0.2)] flex items-center">
+      {/* 순위 */}
+      <strong className="text-3xl font-bold text-(--danger)">
+        {`${index + 1}`.padStart(2, "0")}
+      </strong>
+
+      {/* 이미지 */}
+      <img
+        src={concert.imgUrl}
+        alt={concert.concertTitle}
+        className="w-30 rounded-xl ml-20 "
+      />
+
+      {/* 정보 */}
+      <div className="ml-2.5">
+        {/* 태그 */}
+        <div className="w-10 h-5 bg-(--cream) rounded-xl mb-1.5" />
+        {/* 제목 */}
+        <h3 className="text-lg font-bold line-clamp-1 mb-2">
+          {concert.concertTitle}
+        </h3>
+        {/* 간단 정보 */}
+        <ul className="flex gap-2.5">
+          <li>
+            <span className="text-xs text-(--muted)">
+              {concert.concertStartDate} ~ {concert.concertEndDate}
+            </span>
+          </li>
+          <li>
+            <span className="text-xs text-(--muted)">{concert.venue}</span>
+          </li>
+        </ul>
+      </div>
+
+      <span className="rounded-xl ml-auto px-4 py-2 border border-(--border) hover:bg-(--gold) hover:border-(--gold) hover:text-(--bg)">
+        예매
+      </span>
+    </div>
+  );
+}
