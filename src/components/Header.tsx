@@ -1,9 +1,10 @@
-import { NavLink } from "react-router";
+import { NavLink, useNavigate } from "react-router";
 import Input from "./Input";
 import { Menu, Search, ShoppingCart, Ticket, User, X } from "lucide-react";
 import { useState } from "react";
 
 export default function Header() {
+  const navigate = useNavigate();
   const navMenu = [
     { path: "/", title: "홈" },
     { path: "/concert", title: "콘서트" },
@@ -31,6 +32,7 @@ export default function Header() {
     <div className={`flex-col md:flex-row gap-5 mb-0 ${className}`}>
       <button
         type="button"
+        onClick={() => navigate("/auth/login")}
         className="flex gap-2.5 items-center border border-(--border) hover:bg-(--cream) py-2.5 px-5 rounded-xl md:border-0 md:p-0 md:hover:bg-transparent">
         <User stroke="var(--muted)" />{" "}
         <span className="text-sm text-(--muted)">로그인</span>
