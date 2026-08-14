@@ -11,7 +11,7 @@ export default function Input({
         ${
           error
             ? "border-(--danger) text-(--danger) [&_svg]:stroke-(--danger)"
-            : "border-(--border) text-(--ink) [&_svg]:stroke-(--muted)"
+            : "border-(--ink) text-(--ink) [&_svg]:stroke-(--ink)"
         }
         [&_input]:w-full 
         [&_input]:text-sm

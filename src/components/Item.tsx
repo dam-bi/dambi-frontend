@@ -1,3 +1,5 @@
+import { ArrowRight } from "lucide-react";
+
 export function EventItemSkeleton() {
   return (
     <div className="border border-(--border) transition-all duration-300 ease-in-out hover:-translate-y-1.5  hover:shadow-[0_12px_28px_rgba(26,26,26,0.2)]">
@@ -19,7 +21,7 @@ export function EventItemSkeleton() {
 export function EventItem({ event }: { event: Event }) {
   return (
     <div
-      className={`border border-(--border) rounded-xl overflow-hidden transition-all duration-300 ease-in-out hover:-translate-y-1.5  hover:shadow-[0_12px_28px_rgba(26,26,26,0.2)] relative
+      className={`border border-(--line) rounded-xl overflow-hidden transition-all duration-300 ease-in-out hover:-translate-y-1.5  hover:shadow-[0_12px_28px_rgba(26,26,26,0.2)] relative
     `}>
       {/* 이미지 */}
       <div className="relative">
@@ -28,20 +30,13 @@ export function EventItem({ event }: { event: Event }) {
           alt={event.eventTitle}
           className="aspect-video object-cover"
         />
-        <span
-          className={`border rounded-xl px-3 py-1.5 text-xs absolute top-2.5 left-2.5 ${event.status === "종료" ? "border-(--muted) bg-(--muted) text-(--border)" : "border-(--border) bg-(--bg) text-(--ink)"}`}>
+        <span className="border border-(--line) bg-(--mist) text-(--ink) rounded-xl px-2.5 py-1.25 text-sm absolute top-2.5 left-2.5">
           {event.status}
         </span>
       </div>
       {/* 이벤트 정보 */}
       <div className="p-5">
-        {/* 제목 */}
-        <span
-          className={`text-xs font-bold ${event.status === "종료" ? "text-(--muted)" : "text-(--gold)"}`}>
-          EVENT
-        </span>
-        <h2
-          className={`mb-2 line-clamp-1 break-keep ${event.status === "종료" ? "text-(--muted) font-regular" : "text-(--ink) font-bold"}`}>
+        <h2 className="text-base font-bold line-clamp-1">
           {event.eventTitle}
         </h2>
         <p className="text-(--muted) text-sm">
@@ -84,7 +79,7 @@ export function ConcertItem({
   index: number;
 }) {
   return (
-    <div className="border border-(--border) rounded-xl py-5 px-10  transition-all duration-300 ease-in-out hover:shadow-[0_12px_28px_rgba(26,26,26,0.2)] flex items-center">
+    <div className="border border-(--line) rounded-xl py-5 px-10  transition-all duration-300 ease-in-out hover:shadow-[0_12px_28px_rgba(26,26,26,0.2)] flex items-center">
       {/* 순위 */}
       <strong className="text-3xl font-bold text-(--danger)">
         {`${index + 1}`.padStart(2, "0")}
@@ -118,8 +113,8 @@ export function ConcertItem({
         </ul>
       </div>
 
-      <span className="rounded-xl ml-auto px-4 py-2 border border-(--border) hover:bg-(--gold) hover:border-(--gold) hover:text-(--bg)">
-        예매
+      <span className="ml-auto px-4 py-2 flex items-center text-xl font-semibold text-(--signal)">
+        예매하기 <ArrowRight />
       </span>
     </div>
   );

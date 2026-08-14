@@ -11,14 +11,8 @@ export default function Event() {
   const handleStatus = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCurrentStatus(e.target.value);
   };
-  const {
-    data,
-    fetchNextPage,
-    isFetchingNextPage,
-    hasNextPage,
-    isLoading,
-    isFetching,
-  } = useInfiniteHook("events");
+  const { data, fetchNextPage, isFetchingNextPage, hasNextPage, isLoading } =
+    useInfiniteHook("events");
 
   const { ref, inView } = useInView();
   useEffect(() => {
@@ -29,35 +23,28 @@ export default function Event() {
 
   const events: Event[] = data?.pages.flatMap((page) => page.content) ?? [];
 
-  // console.log(event);
-
   return (
     <section className="w-full max-w-7xl px-5 py-20 mx-auto">
-      <h3 className="text-xl font-semibold text-(--gold)">EVENT</h3>
-
-      {/* filter */}
-      <div className="my-10 rounded-xl border-(--cream) bg-(--cream) p-5">
-        {/* status filter */}
-        <div>
-          <ul className="flex gap-2.5">
-            {status.map((item: string, index: number) => (
-              <li key={index}>
-                <label
-                  className={`px-4 py-2 border text-sm cursor-pointer rounded-xl ${currentStatus === item ? "bg-(--gold) text-(--bg) border-(--gold)" : "bg-(--bg) text-(--ink) border-(--border)"}`}>
-                  {item}
-                  <input
-                    type="radio"
-                    name="status"
-                    value={item}
-                    checked={currentStatus === item}
-                    onChange={handleStatus}
-                    className={`py-px px-2 rounded-xl hidden ${currentStatus}`}
-                  />
-                </label>
-              </li>
-            ))}
-          </ul>
-        </div>
+      {/* status filter */}
+      <div className="mb-10">
+        <ul className="flex gap-2.5">
+          {status.map((item: string, index: number) => (
+            <li key={index}>
+              <label
+                className={`px-2.5 py-1.25 border text-sm cursor-pointer rounded-xl ${currentStatus === item ? "bg-(--signal) text-(--bg) border-(--signal)" : "bg-(--bg) text-(--ink) border-(--line)"}`}>
+                {item}
+                <input
+                  type="radio"
+                  name="status"
+                  value={item}
+                  checked={currentStatus === item}
+                  onChange={handleStatus}
+                  className={`py-px px-2 rounded-xl hidden ${currentStatus}`}
+                />
+              </label>
+            </li>
+          ))}
+        </ul>
       </div>
 
       <div className="">

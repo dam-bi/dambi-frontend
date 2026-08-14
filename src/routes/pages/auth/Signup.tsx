@@ -2,90 +2,88 @@ import { Eye, EyeClosedIcon, Lock, Mail, Smartphone, User } from "lucide-react";
 import Input from "../../../components/Input";
 import Button from "../../../components/Button";
 import { Link } from "react-router";
-import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
+import { useState } from "react";
 
 export default function Signup() {
-  const [signupForm, setSignupForm] = useState({
+  const initForm = {
     name: "",
     email: "",
-    confirmEmail: "",
     password: "",
     confirmPassword: "",
     phone: "",
-  });
-  const [signupError, setSignupError] = useState({
-    name: false,
-    email: false,
-    password: false,
-    confirmPassword: false,
-    phone: false,
-  });
+  };
+  const [signupForm, setSignupForm] = useState(initForm);
+  const [signupError, setSignupError] = useState(initForm);
   const [showPassword, setShowPassword] = useState(false);
+
   const handleSignupForm = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSignupForm((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
+    }));
+    setSignupError((prev) => ({
+      ...prev,
+      [e.target.name]: "",
     }));
   };
 
   const toggleShowPassword = () =>
     setShowPassword((showPassword) => !showPassword);
 
-  useEffect(() => {
-    if (signupForm.password && signupForm.confirmPassword) {
-      if (signupForm.password !== signupForm.confirmPassword) {
-        setSignupError((prev) => ({ ...prev, confirmPassword: true }));
-      } else {
-        setSignupError((prev) => ({ ...prev, confirmPassword: false }));
-      }
-    }
-  }, [signupForm.confirmPassword]);
-
   const submitSignup = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!signupForm.name.trim()) {
-      setSignupError((prev) => ({ ...prev, name: true }));
-      toast.error("이름을 입력해주세요.");
-      return;
-    }
+    try {
+      const formError: SignupValidate = {} as SignupValidate;
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-    if (!signupForm.email.trim()) {
-      setSignupError((prev) => ({ ...prev, email: true }));
-      toast.error("이메일을 입력해주세요.");
-      return;
-    }
+      if (!signupForm.name.trim()) formError.name = "이름을 입력해주세요";
 
-    if (!signupForm.password.trim()) {
-      setSignupError((prev) => ({ ...prev, password: true }));
-      toast.error("비밀번호를 입력해주세요.");
-      return;
-    }
+      if (!signupForm.email.trim()) {
+        formError.email = "이메일을 입력해주세요";
+      } else if (!emailRegex.test(signupForm.email.trim())) {
+        formError.email = "이메일 형식이 맞지 않습니다";
+      }
 
-    if (!signupForm.confirmPassword.trim()) {
-      setSignupError((prev) => ({ ...prev, confirmPassword: true }));
-      toast.error("비밀번호를 한번 더 입력해주세요.");
-      return;
-    }
+      if (signupForm.password.trim().length < 6)
+        formError.password = "비밀번호는 최소 6자 이상이여야 합니다";
 
-    if (!signupForm.phone.trim()) {
-      setSignupError((prev) => ({ ...prev, phone: true }));
-      toast.error("연락처 입력해주세요.");
-      return;
+      if (!signupForm.confirmPassword.trim())
+        formError.confirmPassword = "비밀번호 확인을 입력해주세요";
+
+      if (signupForm.password.trim() !== signupForm.confirmPassword.trim())
+        formError.confirmPassword = "비밀번호가 일치하지 않습니다";
+
+      if (!signupForm.phone.trim()) formError.phone = "연락처를 입력해주세요";
+
+      if (Object.keys(formError).length > 0) {
+        setSignupError(formError);
+        return;
+      }
+
+      const signupData = {
+        name: signupForm.name,
+        email: signupForm.email,
+        password: signupForm.password,
+        phone: signupForm.phone,
+      };
+
+      console.log(signupData);
+    } catch (error) {
+      console.log(error);
     }
   };
 
   return (
     <section className="w-full max-w-7xl px-5 py-20 mx-auto flex justify-center items-center">
-      <div className="w-full max-w-100 border border-(--border) p-5 rounded-xl">
+      <div className="w-full max-w-100">
         <div className="flex flex-col items-center mb-6">
           <img
             src="/Dambi Logo.png"
             alt="담번에 온 비밀 티켓"
             className="w-25"
           />
-          <h2 className="pt-4.5 pb-2 text-2xl font-bold">
+          <h2 className="py-3 text-2xl font-medium">
             담비의 새 식구가 되어주세요.
           </h2>
           <p className="text-(--muted) text-sm">
@@ -93,58 +91,60 @@ export default function Signup() {
           </p>
         </div>
 
-        <form onSubmit={submitSignup} className="flex flex-col gap-3 mb-10">
+        <form onSubmit={submitSignup} className="flex flex-col gap-5 py-10">
           <div className="flex flex-col gap-1">
-            <label htmlFor="name" className="text-sm text-(--muted)">
+            <label htmlFor="name" className="text-sm">
               이름
             </label>
-            <Input error={signupError.name}>
+            <Input error={!!signupError.name}>
               <User />
               <input
                 type="text"
                 name="name"
                 id="name"
                 autoComplete="off"
+                placeholder="이름"
                 value={signupForm.name}
                 onChange={handleSignupForm}
               />
             </Input>
+            {signupError?.name && (
+              <p className="text-(--danger) text-sm">{signupError.name}</p>
+            )}
           </div>
           <div className="flex flex-col gap-1">
-            <label htmlFor="email" className="text-sm text-(--muted)">
+            <label htmlFor="email" className="text-sm">
               이메일
             </label>
-            <div className="flex gap-2.5 items-center">
-              <Input error={signupError.email}>
-                <Mail />
-                <input
-                  type="email"
-                  name="email"
-                  id="email"
-                  autoComplete="off"
-                  value={signupForm.email}
-                  onChange={handleSignupForm}
-                />
-              </Input>
-              <Button
-                type="button"
-                className="border border-(--border) text-nowrap text-sm">
-                중복 확인
-              </Button>
-            </div>
+            <Input error={!!signupError.email}>
+              <Mail />
+              <input
+                type="email"
+                name="email"
+                id="email"
+                autoComplete="off"
+                placeholder="example@email.com"
+                value={signupForm.email}
+                onChange={handleSignupForm}
+              />
+            </Input>
+            {signupError?.email && (
+              <p className="text-(--danger) text-sm">{signupError.email}</p>
+            )}
           </div>
           <div className="flex flex-col gap-1">
-            <label htmlFor="email" className="text-sm text-(--muted)">
+            <label htmlFor="email" className="text-sm">
               비밀번호
             </label>
             <div className="flex gap-2.5 items-center">
-              <Input error={signupError.password}>
+              <Input error={!!signupError.password}>
                 <Lock />
                 <input
                   type={showPassword ? "text" : "password"}
                   name="password"
                   id="password"
                   autoComplete="off"
+                  placeholder="최소 6자 이상"
                   value={signupForm.password}
                   onChange={handleSignupForm}
                 />
@@ -156,29 +156,38 @@ export default function Signup() {
                 {showPassword ? <Eye /> : <EyeClosedIcon />}
               </Button>
             </div>
+            {signupError?.password && (
+              <p className="text-(--danger) text-sm">{signupError.password}</p>
+            )}
           </div>
 
           <div className="flex flex-col gap-1">
-            <label htmlFor="confirmPassword" className="text-sm text-(--muted)">
+            <label htmlFor="confirmPassword" className="text-sm">
               비밀번호 확인
             </label>
-            <Input error={signupError.confirmPassword}>
+            <Input error={!!signupError.confirmPassword}>
               <Lock />
               <input
                 type="password"
                 name="confirmPassword"
                 id="confirmPassword"
                 autoComplete="off"
+                placeholder="비밀번호를 한번 더 입력해주세요"
                 value={signupForm.confirmPassword}
                 onChange={handleSignupForm}
               />
             </Input>
+            {signupError?.confirmPassword && (
+              <p className="text-(--danger) text-sm">
+                {signupError.confirmPassword}
+              </p>
+            )}
           </div>
           <div className="flex flex-col gap-1">
-            <label htmlFor="phone" className="text-sm text-(--muted)">
+            <label htmlFor="phone" className="text-sm">
               연락처
             </label>
-            <Input error={signupError.phone}>
+            <Input error={!!signupError.phone}>
               <Smartphone />
               <input
                 type="text"
@@ -186,28 +195,29 @@ export default function Signup() {
                 id="phone"
                 autoComplete="off"
                 placeholder="010xxxxxxxx"
-                className="placeholder:text-(--danger)"
+                maxLength={11}
                 value={signupForm.phone}
                 onChange={handleSignupForm}
               />
             </Input>
+            {signupError?.phone && (
+              <p className="text-(--danger) text-sm">{signupError.phone}</p>
+            )}
           </div>
           <Button
             type="submit"
-            className="border border-(--border) bg-(--cream) mt-5">
+            className="bg-(--signal) text-base font-semibold text-(--bg) mt-5">
             회원가입
           </Button>
         </form>
 
         {/* 회원가입 라우트 */}
-        <div className="pt-10 pb-5 border-t border-(--border)">
-          <span className="flex items-center justify-center text-xs text-(--muted) gap-2">
-            이미 계정이 있으신가요?
-            <Link to="/auth/login" className="text-(--ink) font-medium">
-              로그인
-            </Link>
-          </span>
-        </div>
+        <p className="flex items-center justify-center text-sm text-(--muted) gap-2">
+          이미 계정이 있으신가요?
+          <Link to="/auth/login" className="text-(--ink) font-medium text-base">
+            로그인
+          </Link>
+        </p>
       </div>
     </section>
   );

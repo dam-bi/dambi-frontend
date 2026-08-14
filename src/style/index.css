@@ -3,13 +3,16 @@
 @layer base {
   :root {
     --bg: #ffffff;
-    --ink: #1a1a1a;
-    --muted: #767267;
-    --cream: #f7f5f0;
-    --border: #e4e0d8;
-    --danger: #c81e3a;
-    --danger-dark: #9e1730;
-    --gold: #b8952e;
+    --ink: #17181b;
+    --signal: #3e6e88;
+    --signal-dark: #2c4f63;
+    --mist: #eef2f1;
+    --line: #dce3e1;
+    --muted: #697077;
+    --danger: #b3413a;
+    --danger-bg: #f6e7e5;
+    --ok: #3c7a5d;
+    --ok-bg: #e7f1eb;
   }
 
   html {
