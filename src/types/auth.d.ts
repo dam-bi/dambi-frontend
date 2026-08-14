@@ -9,3 +9,7 @@ interface SignupForm {
   password: string;
   phone: string;
 }
+
+interface SignupValidate extends SignupForm {
+  confirmPassword;
+}

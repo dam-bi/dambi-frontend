@@ -9,7 +9,9 @@ export default function Login() {
     email: "",
     password: "",
   });
+
   const [showPassword, setShowPassword] = useState(false);
+
   const handleLoginForm = (e: React.ChangeEvent<HTMLInputElement>) => {
     setLoginForm((prev) => ({
       ...prev,
@@ -21,23 +23,23 @@ export default function Login() {
     setShowPassword((showPassword) => !showPassword);
 
   return (
-    <section className="w-full max-w-7xl px-5 py-20 mx-auto flex justify-center items-center h-screen">
-      <div className="w-full max-w-100 border border-(--border) p-5 rounded-xl">
+    <section className="w-full max-w-7xl px-5 py-20 mx-auto flex justify-center items-center">
+      <div className="w-full max-w-100">
         <div className="flex flex-col items-center mb-6">
           <img
             src="/Dambi Logo.png"
             alt="담번에 온 비밀 티켓"
             className="w-25"
           />
-          <h2 className="pt-4.5 pb-2 text-2xl font-bold">다시 만나 반가워요</h2>
+          <h2 className="py-3 text-2xl font-medium">다시 만나 반가워요</h2>
           <p className="text-(--muted) text-sm">
             담비와 함께 오늘도 가장 빠르게 잡아볼까요?
           </p>
         </div>
 
-        <form className="flex flex-col gap-3 mb-10">
+        <form className="flex flex-col gap-5 py-10">
           <div className="flex flex-col gap-1">
-            <label htmlFor="email" className="text-sm text-(--muted)">
+            <label htmlFor="email" className="text-sm">
               이메일
             </label>
             <Input error={false}>
@@ -52,7 +54,7 @@ export default function Login() {
             </Input>
           </div>
           <div className="flex flex-col gap-1">
-            <label htmlFor="email" className="text-sm text-(--muted)">
+            <label htmlFor="email" className="text-sm">
               비밀번호
             </label>
             <div className="flex gap-2.5 items-center">
@@ -69,27 +71,27 @@ export default function Login() {
               <Button
                 type="button"
                 onClick={toggleShowPassword}
-                className="border border-(--border)">
+                className="border border-(--ink)">
                 {showPassword ? <Eye /> : <EyeClosedIcon />}
               </Button>
             </div>
           </div>
           <Button
             type="submit"
-            className="border border-(--border) bg-(--cream) mt-5">
+            className="bg-(--signal) text-base font-semibold text-(--bg) mt-5">
             로그인
           </Button>
         </form>
 
         {/* 회원가입 라우트 */}
-        <div className="pt-10 pb-5 border-t border-(--border)">
-          <span className="flex items-center justify-center text-xs text-(--muted) gap-2">
-            아직 담비 회원이 아니신가요?{" "}
-            <Link to="/auth/signup" className="text-(--ink) font-medium">
-              회원가입
-            </Link>
-          </span>
-        </div>
+        <p className="flex items-center justify-center text-sm text-(--muted) gap-2">
+          아직 담비 회원이 아니신가요?{" "}
+          <Link
+            to="/auth/signup"
+            className="text-(--ink) font-medium text-base">
+            회원가입
+          </Link>
+        </p>
       </div>
     </section>
   );
