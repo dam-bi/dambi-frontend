@@ -1,10 +1,14 @@
 import { Eye, EyeClosedIcon, Lock, Mail, Smartphone, User } from "lucide-react";
 import Input from "../../../components/Input";
 import Button from "../../../components/Button";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useState } from "react";
+import { useSignupMutation } from "../../../hook/useAuthMutationHook";
+import toast from "react-hot-toast";
+import axios from "axios";
 
 export default function Signup() {
+  const navigate = useNavigate();
   const initForm = {
     name: "",
     email: "",
@@ -15,6 +19,8 @@ export default function Signup() {
   const [signupForm, setSignupForm] = useState(initForm);
   const [signupError, setSignupError] = useState(initForm);
   const [showPassword, setShowPassword] = useState(false);
+
+  const { mutate, isPending } = useSignupMutation();
 
   const handleSignupForm = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSignupForm((prev) => ({
@@ -33,45 +39,62 @@ export default function Signup() {
   const submitSignup = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    try {
-      const formError: SignupValidate = {} as SignupValidate;
-      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const formError: SignupValidate = {} as SignupValidate;
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-      if (!signupForm.name.trim()) formError.name = "이름을 입력해주세요";
+    if (!signupForm.name.trim()) formError.name = "이름을 입력해주세요";
 
-      if (!signupForm.email.trim()) {
-        formError.email = "이메일을 입력해주세요";
-      } else if (!emailRegex.test(signupForm.email.trim())) {
-        formError.email = "이메일 형식이 맞지 않습니다";
-      }
-
-      if (signupForm.password.trim().length < 6)
-        formError.password = "비밀번호는 최소 6자 이상이여야 합니다";
-
-      if (!signupForm.confirmPassword.trim())
-        formError.confirmPassword = "비밀번호 확인을 입력해주세요";
-
-      if (signupForm.password.trim() !== signupForm.confirmPassword.trim())
-        formError.confirmPassword = "비밀번호가 일치하지 않습니다";
-
-      if (!signupForm.phone.trim()) formError.phone = "연락처를 입력해주세요";
-
-      if (Object.keys(formError).length > 0) {
-        setSignupError(formError);
-        return;
-      }
-
-      const signupData = {
-        name: signupForm.name,
-        email: signupForm.email,
-        password: signupForm.password,
-        phone: signupForm.phone,
-      };
-
-      console.log(signupData);
-    } catch (error) {
-      console.log(error);
+    if (!signupForm.email.trim()) {
+      formError.email = "이메일을 입력해주세요";
+    } else if (!emailRegex.test(signupForm.email.trim())) {
+      formError.email = "이메일 형식이 맞지 않습니다";
     }
+
+    if (signupForm.password.trim().length < 6)
+      formError.password = "비밀번호는 최소 6자 이상이여야 합니다";
+
+    if (!signupForm.confirmPassword.trim())
+      formError.confirmPassword = "비밀번호 확인을 입력해주세요";
+
+    if (signupForm.password.trim() !== signupForm.confirmPassword.trim())
+      formError.confirmPassword = "비밀번호가 일치하지 않습니다";
+
+    if (!signupForm.phone.trim()) formError.phone = "연락처를 입력해주세요";
+
+    if (Object.keys(formError).length > 0) {
+      setSignupError(formError);
+      return;
+    }
+
+    const signupData = {
+      name: signupForm.name,
+      email: signupForm.email,
+      password: signupForm.password,
+      phone: signupForm.phone,
+    };
+
+    mutate(signupData, {
+      onSuccess: () => {
+        toast.success("회원가입이 완료되었습니다.");
+        setSignupForm(initForm);
+        setSignupError(initForm);
+        setTimeout(() => navigate("/auth/login"), 1000);
+      },
+      onError: (error) => {
+        if (axios.isAxiosError(error)) {
+          const errorMessage = error.response?.data?.message;
+
+          if (!errorMessage) toast.error("회원가입에 실패했습니다.");
+          
+          setSignupError((prev) => ({
+            ...prev,
+            email: errorMessage,
+          }));
+        } else {
+          toast.error("알 수 없는 에러가 발생했습니다.");
+        }
+      },
+    });
   };
 
   return (
@@ -207,7 +230,7 @@ export default function Signup() {
           <Button
             type="submit"
             className="bg-(--signal) text-base font-semibold text-(--bg) mt-5">
-            회원가입
+            {isPending ? "처리 중..." : "회원가입"}
           </Button>
         </form>
 

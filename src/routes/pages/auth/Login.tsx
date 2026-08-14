@@ -1,26 +1,71 @@
-import { Eye, EyeClosedIcon, Lock, Mail } from "lucide-react";
+import { Eye, EyeClosedIcon, Loader, Lock, Mail } from "lucide-react";
 import Input from "../../../components/Input";
 import Button from "../../../components/Button";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useState } from "react";
+import { useLoginMutation } from "../../../hook/useAuthMutationHook";
+import toast from "react-hot-toast";
 
 export default function Login() {
-  const [loginForm, setLoginForm] = useState({
+  const navigate = useNavigate();
+  const initForm = {
     email: "",
     password: "",
-  });
-
+  };
+  const [loginForm, setLoginForm] = useState(initForm);
+  const [loginError, setLoginError] = useState(initForm);
   const [showPassword, setShowPassword] = useState(false);
+
+  const { mutate, isPending } = useLoginMutation();
 
   const handleLoginForm = (e: React.ChangeEvent<HTMLInputElement>) => {
     setLoginForm((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
     }));
+
+    setLoginError((prev) => ({
+      ...prev,
+      [e.target.name]: "",
+    }));
   };
 
   const toggleShowPassword = () =>
     setShowPassword((showPassword) => !showPassword);
+
+  const sumbitLogin = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const formError: LoginForm = {} as LoginForm;
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+    if (!loginForm.email.trim()) {
+      formError.email = "이메일을 입력해주세요.";
+    } else if (!emailRegex.test(loginForm.email.trim())) {
+      formError.email = "이메일 형식이 맞지 않습니다.";
+    }
+
+    if (loginForm.password.trim().length < 6) {
+      formError.password = "비밀번호는 최소 6자 이상입니다.";
+    }
+
+    if (Object.keys(formError).length > 0) {
+      setLoginError(formError);
+      return;
+    }
+
+    mutate(loginForm, {
+      onSuccess: () => {
+        toast.success("로그인에 성공했습니다.");
+        setLoginForm(initForm);
+        setLoginError(initForm);
+        setTimeout(() => navigate("/"), 1000);
+      },
+      onError: (error) => {
+        console.log(error);
+      },
+    });
+  };
 
   return (
     <section className="w-full max-w-7xl px-5 py-20 mx-auto flex justify-center items-center">
@@ -37,33 +82,38 @@ export default function Login() {
           </p>
         </div>
 
-        <form className="flex flex-col gap-5 py-10">
+        <form onSubmit={sumbitLogin} className="flex flex-col gap-5 py-10">
           <div className="flex flex-col gap-1">
             <label htmlFor="email" className="text-sm">
               이메일
             </label>
-            <Input error={false}>
+            <Input error={!!loginError.email}>
               <Mail />
               <input
                 type="email"
                 name="email"
                 id="email"
+                disabled={isPending}
                 value={loginForm.email}
                 onChange={handleLoginForm}
               />
             </Input>
+            {loginError?.email && (
+              <p className="text-(--danger) text-sm">{loginError.email}</p>
+            )}
           </div>
           <div className="flex flex-col gap-1">
             <label htmlFor="email" className="text-sm">
               비밀번호
             </label>
             <div className="flex gap-2.5 items-center">
-              <Input error={false}>
+              <Input error={!!loginError.password}>
                 <Lock />
                 <input
                   type={showPassword ? "text" : "password"}
                   name="password"
                   id="password"
+                  disabled={isPending}
                   value={loginForm.password}
                   onChange={handleLoginForm}
                 />
@@ -75,17 +125,21 @@ export default function Login() {
                 {showPassword ? <Eye /> : <EyeClosedIcon />}
               </Button>
             </div>
+            {loginError?.password && (
+              <p className="text-(--danger) text-sm">{loginError.password}</p>
+            )}
           </div>
           <Button
             type="submit"
+            disabled={isPending}
             className="bg-(--signal) text-base font-semibold text-(--bg) mt-5">
-            로그인
+            {isPending ? <Loader /> : "로그인"}
           </Button>
         </form>
 
         {/* 회원가입 라우트 */}
         <p className="flex items-center justify-center text-sm text-(--muted) gap-2">
-          아직 담비 회원이 아니신가요?{" "}
+          아직 담비 회원이 아니신가요?
           <Link
             to="/auth/signup"
             className="text-(--ink) font-medium text-base">
