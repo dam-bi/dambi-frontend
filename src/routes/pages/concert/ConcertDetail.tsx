@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import { Heart } from "lucide-react";
 import useQueryHook from "../../../hook/useQueryHook";
 import { ConcertDetailPageSkeleton } from "../../../components/pageSkeleton";
+import { useWishListStore } from "../../../store/useWishListStore";
 
 export default function ConcertDetail() {
   // 브라우저 api
@@ -16,6 +17,7 @@ export default function ConcertDetail() {
     error,
     data: concert,
   } = useQueryHook<ConcertDetail>("concerts", id!);
+  const { wishListId, addWishList } = useWishListStore();
   // useState
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedRound, setSelectedRound] = useState("");
@@ -48,6 +50,33 @@ export default function ConcertDetail() {
   const handleSelectedRound = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newRound = e.target.value;
     setSelectedRound(newRound);
+  };
+
+  const handleAddWishList = () => {
+    const wishItem = {
+      concertId: concert.concertId,
+      concertTitle: concert.concertTitle,
+      imgUrl: concert.imgUrl,
+      venue: concert.venue,
+      concertStartDate: concert.concertStartDate,
+    };
+    addWishList(wishItem);
+
+    if (!wishListId.includes(wishItem.concertId)) {
+      if (
+        window.confirm(
+          `${wishItem.concertTitle} - 찜목록에 추가되었습니다. 찜목록으로 이동할까요?`,
+        )
+      ) {
+        navigate("/wishList");
+      } else {
+        toast.success(`${wishItem.concertTitle} - 찜목록에 추가되었습니다.`, {
+          id: "wishList-add",
+          duration: 1000,
+        });
+        return;
+      }
+    }
   };
 
   return (
@@ -189,9 +218,13 @@ export default function ConcertDetail() {
           </Link>
           <button
             type="button"
+            onClick={handleAddWishList}
             className="border border-(--line) py-2.5 rounded-xl flex items-center justify-center gap-2.5 text-base font-semibold">
-            <Heart />
-            찜목록
+            <Heart
+              fill={`${wishListId.includes(concert.concertId) ? "var(--danger)" : "var(--bg)"}`}
+              stroke={`${wishListId.includes(concert.concertId) ? "var(--danger)" : "var(--ink)"}`}
+            />
+            {wishListId.includes(concert.concertId) ? "찜목록" : "찜목록 추가"}
           </button>
         </div>
       </div>
