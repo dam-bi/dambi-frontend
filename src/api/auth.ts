@@ -7,7 +7,7 @@ export async function signup({ signupData }: { signupData: SignupForm }) {
 }
 
 export async function login({ loginData }: { loginData: LoginForm }) {
-  const res = await axiosInstance.post("/auth/login", loginData);
+  const { data } = await axiosInstance.post("/auth/login", loginData);
 
-  console.log(res);
+  return data;
 }

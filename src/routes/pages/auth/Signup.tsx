@@ -1,4 +1,12 @@
-import { Eye, EyeClosedIcon, Lock, Mail, Smartphone, User } from "lucide-react";
+import {
+  Eye,
+  EyeClosedIcon,
+  Loader,
+  Lock,
+  Mail,
+  Smartphone,
+  User,
+} from "lucide-react";
 import Input from "../../../components/Input";
 import Button from "../../../components/Button";
 import { Link, useNavigate } from "react-router";
@@ -85,7 +93,7 @@ export default function Signup() {
           const errorMessage = error.response?.data?.message;
 
           if (!errorMessage) toast.error("회원가입에 실패했습니다.");
-          
+
           setSignupError((prev) => ({
             ...prev,
             email: errorMessage,
@@ -230,7 +238,7 @@ export default function Signup() {
           <Button
             type="submit"
             className="bg-(--signal) text-base font-semibold text-(--bg) mt-5">
-            {isPending ? "처리 중..." : "회원가입"}
+            {isPending ? <Loader className="animate-spin" /> : "회원가입"}
           </Button>
         </form>
 
