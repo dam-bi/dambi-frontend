@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router";
 import { useState } from "react";
 import { useLoginMutation } from "../../../hook/useAuthMutationHook";
 import toast from "react-hot-toast";
+import axios from "axios";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -62,7 +63,22 @@ export default function Login() {
         setTimeout(() => navigate("/"), 1000);
       },
       onError: (error) => {
-        console.log(error);
+        if (axios.isAxiosError(error)) {
+          const errorMessage = error.response?.data?.message;
+          toast.error(errorMessage);
+
+          if (errorMessage === "가입되지 않았거나 틀린 이메일입니다") {
+            setLoginError((prev) => ({
+              ...prev,
+              email: errorMessage,
+            }));
+          } else {
+            setLoginError((prev) => ({
+              ...prev,
+              password: errorMessage,
+            }));
+          }
+        }
       },
     });
   };
@@ -95,6 +111,7 @@ export default function Login() {
                 id="email"
                 disabled={isPending}
                 value={loginForm.email}
+                placeholder="example@email.com"
                 onChange={handleLoginForm}
               />
             </Input>
@@ -114,6 +131,7 @@ export default function Login() {
                   name="password"
                   id="password"
                   disabled={isPending}
+                  placeholder="******"
                   value={loginForm.password}
                   onChange={handleLoginForm}
                 />
@@ -132,8 +150,8 @@ export default function Login() {
           <Button
             type="submit"
             disabled={isPending}
-            className="bg-(--signal) text-base font-semibold text-(--bg) mt-5">
-            {isPending ? <Loader /> : "로그인"}
+            className="bg-(--signal) text-base font-semibold text-(--bg) mt-5 flex justify-center items-center">
+            {isPending ? <Loader className="animate-spin" /> : "로그인"}
           </Button>
         </form>
 

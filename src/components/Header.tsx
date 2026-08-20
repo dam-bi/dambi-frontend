@@ -25,8 +25,8 @@ export default function Header() {
             {/* 타이틀 */}
             <div className="flex items-center">
               <h1 className="text-lg md:text-[32px] font-black">
-                <span className="text-(--signal)">담</span>번에 온 비밀{" "}
-                <span className="text-(--signal)">티</span>켓
+                <span className="text-(--signal)">담</span>번에 온{" "}
+                <span className="text-(--signal)">비</span>밀 티켓
               </h1>
             </div>
             {/* 네비게이션 */}
