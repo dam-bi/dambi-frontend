@@ -7,7 +7,6 @@ export default function NavButton({ className }: { className: string }) {
 
   const { isLogin, user, logout } = useAuthStore();
 
-  console.log(user);
   return (
     <div className={`flex-col md:flex-row gap-5 ${className}`}>
       <button
