@@ -212,7 +212,7 @@ export default function ConcertDetail() {
 
         <div className="flex flex-col gap-2.5">
           <Link
-            to="/checkout"
+            to={`/checkout?concertId=${concert.concertId}`}
             className="rounded-xl py-4 px-8 text-center font-bold bg-(--signal) text-(--bg) text-base">
             예매하기
           </Link>
