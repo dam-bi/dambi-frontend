@@ -9,6 +9,8 @@ import WishList from "./routes/pages/wishList/WishList";
 import Checkout from "./routes/pages/checkout/Checkout";
 import Login from "./routes/pages/auth/Login";
 import Signup from "./routes/pages/auth/Signup";
+import Success from "./routes/pages/payment/Success";
+import Failed from "./routes/pages/payment/Failed";
 
 const router = createBrowserRouter([
   {
@@ -22,6 +24,8 @@ const router = createBrowserRouter([
       { path: "/event/:id", Component: EventDetail },
       { path: "/wishList", Component: WishList },
       { path: "/checkout", Component: Checkout },
+      { path: "/checkout/success", Component: Success },
+      { path: "/checkout/failed", Component: Failed },
       { path: "/auth/login", Component: Login },
       { path: "/auth/signup", Component: Signup },
     ],
