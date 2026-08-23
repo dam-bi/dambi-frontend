@@ -36,9 +36,7 @@ export function EventItem({ event }: { event: Event }) {
       </div>
       {/* 이벤트 정보 */}
       <div className="p-5">
-        <h2 className="text-base font-bold line-clamp-1">
-          {event.eventTitle}
-        </h2>
+        <h2 className="text-base font-bold line-clamp-1">{event.eventTitle}</h2>
         <p className="text-(--muted) text-sm">
           {event.eventStartDate} ~ {event.eventEndDate}
         </p>
@@ -116,6 +114,34 @@ export function ConcertItem({
       <span className="ml-auto px-4 py-2 flex items-center text-xl font-semibold text-(--signal)">
         예매하기 <ArrowRight />
       </span>
+    </div>
+  );
+}
+
+export function ReserveItemSkeleton() {
+  return (
+    <div className="border border-(--line) rounded-xl py-5 px-10  transition-all duration-300 ease-in-out hover:-translate-y-1.5  hover:shadow-[0_12px_28px_rgba(26,26,26,0.2)] flex flex-col gap-5  md:flex-row md:items-center">
+      <div className="flex items-center flex-1 gap-2.5">
+        {/* 이미지 */}
+        <div className="bg-(--mist) w-30 h-40 rounded-xl animate-pulse" />
+
+        {/* 정보 */}
+        <div className="flex-1">
+          {/* 티켓 번호 */}
+          <div className="w-full max-w-50 h-5 bg-(--mist) rounded-xl mb-1.5 animate-pulse" />
+          {/* 제목 */}
+          <div className="w-[50%] max-w-30 h-5.5 bg-(--mist) rounded-xl mb-2 animate-pulse" />
+          {/* 날짜 정보 */}
+          <div className="w-full max-w-70 h-5 bg-(--mist) rounded-xl animate-pulse" />
+        </div>
+      </div>
+
+      {/* 예매 정보 */}
+      <div className="flex gap-5">
+        <div className="w-14 h-10 bg-(--mist) rounded-xl  animate-pulse flex-1" />
+        <div className="w-14 h-10 bg-(--mist) rounded-xl  animate-pulse flex-1" />
+        <div className="w-14 h-10 bg-(--mist) rounded-xl  animate-pulse flex-1" />
+      </div>
     </div>
   );
 }
