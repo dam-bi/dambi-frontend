@@ -11,6 +11,8 @@ import Login from "./routes/pages/auth/Login";
 import Signup from "./routes/pages/auth/Signup";
 import Success from "./routes/pages/payment/Success";
 import Failed from "./routes/pages/payment/Failed";
+import Guest from "./routes/pages/guest/Guest";
+import Reserve from "./routes/pages/checkout/Reserve";
 
 const router = createBrowserRouter([
   {
@@ -28,6 +30,9 @@ const router = createBrowserRouter([
       { path: "/checkout/failed", Component: Failed },
       { path: "/auth/login", Component: Login },
       { path: "/auth/signup", Component: Signup },
+      { path: "/reserve", Component: Reserve },
+      { path: "/guest", Component: Guest },
+      { path: "/guest/reserve", Component: Reserve },
     ],
   },
 ]);
