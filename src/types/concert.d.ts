@@ -29,10 +29,59 @@ interface ConcertDetail {
 }
 
 interface ScheduleItem {
-  concertScheduleId: number;
   date: string;
   showList: {
-    showId: number;
     time: string;
   }[];
 }
+
+interface SeatList {
+  id: string;
+  color: string;
+  seatsTitle: string;
+  seatsPrice: null | number;
+  seatsAmount: null | number;
+  seatsStatus: "available" | "hold" | "reserved";
+}
+
+interface ConcertForm {
+  bookingCnt: number;
+  concertTitle: string;
+  ageRating: string;
+  venue: string;
+  runningTime: null | number;
+  concertDesc: string;
+  imgUrl: string;
+  seatList: SeatList[];
+  schedule: { date: string; showList: { time: string }[] }[];
+}
+
+type ConcertAction =
+  | {
+      type: "SET_concertTitle";
+      payload: string;
+    }
+  | {
+      type: "SET_concertDesc";
+      payload: string;
+    }
+  | {
+      type: "SET_ageRating";
+      payload: string;
+    }
+  | {
+      type: "SET_venue";
+      payload: string;
+    }
+  | {
+      type: "SET_runningTime";
+      payload: number;
+    }
+  | {
+      type: "SET_seatList";
+      payload: SeatList[];
+    }
+  | {
+      type: "SET_schedule";
+      payload: ScheduleItem[];
+    };

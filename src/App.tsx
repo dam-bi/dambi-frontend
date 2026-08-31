@@ -13,6 +13,7 @@ import Success from "./routes/pages/payment/Success";
 import Failed from "./routes/pages/payment/Failed";
 import Guest from "./routes/pages/guest/Guest";
 import Reserve from "./routes/pages/checkout/Reserve";
+import RegisterConcert from "./routes/pages/admin/concert/RegisterConcert";
 
 const router = createBrowserRouter([
   {
@@ -33,6 +34,8 @@ const router = createBrowserRouter([
       { path: "/reserve", Component: Reserve },
       { path: "/guest", Component: Guest },
       { path: "/guest/reserve", Component: Reserve },
+
+      { path: "/admin/concert", Component: RegisterConcert },
     ],
   },
 ]);

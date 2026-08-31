@@ -17,8 +17,6 @@ export async function fetchAllData({
 
   const data = await response.json();
 
-  console.log(data);
-
   return data;
 }
 
